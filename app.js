@@ -5,7 +5,7 @@
   const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const lista = (s) => String(s || '').split(/[,;/]/).map((x) => x.trim()).filter(Boolean);
-  const NOME = cfg.NOME || 'Vestiti';
+  const NOME = cfg.NOME || 'GF Store';
   const WHATS = String(cfg.WHATSAPP || '').replace(/\D/g, '');
 
   // ---------- marca e contatos ----------
