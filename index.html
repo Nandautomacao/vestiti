@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vestiti · Moda feminina</title>
+<meta name="description" content="Catálogo da Vestiti: escolha suas peças e faça o pedido pelo WhatsApp.">
+<meta name="theme-color" content="#7b5ea7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237b5ea7'/%3E%3Ctext x='16' y='23' font-family='Georgia' font-style='italic' font-size='20' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div class="aviso">Escolha suas peças, monte a sacola e finalize o pedido pelo WhatsApp</div>
+
+<header class="topo">
+  <div class="topo-in">
+    <a class="marca" href="#" aria-label="Início">
+      <span class="logo" id="logoNome">Vestiti</span>
+    </a>
+    <nav class="acoes">
+      <a class="icone" id="linkInsta" href="#" target="_blank" rel="noopener" hidden aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/></svg>
+      </a>
+      <button type="button" class="sacola-btn" id="btnSacola" aria-label="Abrir sacola">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+        <span>Sacola</span><b id="sacolaQtd" hidden>0</b>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow">Coleção disponível</p>
+    <h1 id="slogan">Moda feminina para o seu dia a dia</h1>
+    <p class="hero-sub">Veja as peças, escolha tamanho e cor, e fale com a gente pelo WhatsApp para fechar o pedido.</p>
+  </section>
+
+  <section class="filtros" aria-label="Filtros">
+    <div class="chips" id="categorias" role="tablist"></div>
+    <div class="busca">
+      <input type="search" id="busca" placeholder="Buscar peça" aria-label="Buscar peça">
+      <select id="ordem" aria-label="Ordenar">
+        <option value="novos">Novidades</option>
+        <option value="menor">Menor preço</option>
+        <option value="maior">Maior preço</option>
+      </select>
+    </div>
+  </section>
+
+  <div id="estado" class="estado"></div>
+  <section class="grade" id="grade" aria-live="polite"></section>
+</main>
+
+<footer class="rodape">
+  <div class="rodape-in">
+    <div>
+      <div class="logo pequeno" id="logoRodape">Vestiti</div>
+      <p class="muted" id="enderecoRodape" hidden></p>
+    </div>
+    <div class="contatos">
+      <span class="muted">Atendimento pelo WhatsApp</span>
+      <a id="linkWhatsRodape" href="#" target="_blank" rel="noopener"></a>
+      <a id="linkInstaRodape" href="#" target="_blank" rel="noopener" hidden></a>
+    </div>
+  </div>
+</footer>
+
+<!-- Detalhe da peça -->
+<dialog id="dlgPeca" class="painel">
+  <div class="peca">
+    <div class="peca-foto"><img id="pecaImg" alt=""></div>
+    <div class="peca-info">
+      <button type="button" class="fechar" data-close aria-label="Fechar">×</button>
+      <p class="eyebrow" id="pecaCat"></p>
+      <h2 id="pecaNome"></h2>
+      <p class="preco" id="pecaPreco"></p>
+      <p id="pecaEstoque" class="estoque-tag" hidden></p>
+      <p id="pecaDesc" class="desc"></p>
+      <div id="grupoTam" class="grupo">
+        <span class="rotulo">Tamanho</span>
+        <div class="opcoes" id="pecaTam"></div>
+      </div>
+      <div id="grupoCor" class="grupo">
+        <span class="rotulo">Cor</span>
+        <div class="opcoes" id="pecaCor"></div>
+      </div>
+      <div class="grupo">
+        <span class="rotulo">Quantidade</span>
+        <div class="qtd">
+          <button type="button" id="qtdMenos" aria-label="Diminuir">−</button>
+          <output id="qtdValor">1</output>
+          <button type="button" id="qtdMais" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+      <p class="erro" id="pecaErro" hidden></p>
+      <div class="botoes">
+        <button type="button" class="primario" id="btnAdd">Adicionar à sacola</button>
+        <a class="secundario" id="btnPedirJa" href="#" target="_blank" rel="noopener">Pedir só esta peça pelo WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- Sacola -->
+<dialog id="dlgSacola" class="gaveta">
+  <div class="gaveta-in">
+    <div class="gaveta-topo">
+      <h2>Sua sacola</h2>
+      <button type="button" class="fechar" data-close aria-label="Fechar">×</button>
+    </div>
+    <div id="sacolaLista" class="sacola-lista"></div>
+    <div class="gaveta-pe" id="sacolaPe">
+      <div class="total"><span>Total</span><strong id="sacolaTotal">R$ 0,00</strong></div>
+      <label class="campo">Seu nome (opcional)<input id="clienteNome" maxlength="60" autocomplete="name"></label>
+      <a class="primario" id="btnFinalizar" href="#" target="_blank" rel="noopener">Finalizar pedido pelo WhatsApp</a>
+      <p class="muted pequeno-txt">O pedido é confirmado na conversa: forma de pagamento, entrega ou retirada.</p>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
