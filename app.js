@@ -1,4 +1,5 @@
 (() => {
+  const BORBOLETA = '<svg class="borboleta" viewBox="0 0 64 48" aria-hidden="true"><g class="asas"><path class="asa-a" d="M31 22C27 9 14 1 7 4 0 7 3 18 14 22z"/><path class="asa-a" d="M33 22C37 9 50 1 57 4c7 3 4 14-7 18z"/><path class="asa-b" d="M31 24c-9-1-17 5-15 12 2 6 10 6 15-6z"/><path class="asa-b" d="M33 24c9-1 17 5 15 12-2 6-10 6-15-6z"/></g><rect class="corpo" x="30.6" y="15" width="2.8" height="22" rx="1.4"/><path class="antena" d="M32 16c-1-5-4-9-7-11M32 16c1-5 4-9 7-11" fill="none" stroke-width="1.3" stroke-linecap="round"/></svg>';
   const $ = (id) => document.getElementById(id);
   const cfg = window.LOJA_CONFIG || {};
   const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -26,9 +27,8 @@
   function toast(m) { const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), 2600); }
 
   // imagem padrão para peça sem foto
-  const semFoto = (nome) => {
-    const ini = esc((nome || NOME).trim().charAt(0).toUpperCase());
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400'><rect width='300' height='400' fill='#efe8f7'/><text x='150' y='232' font-family='Georgia,serif' font-style='italic' font-size='120' fill='#7b5ea7' fill-opacity='.35' text-anchor='middle'>${ini}</text></svg>`;
+  const semFoto = () => {
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400'><rect width='300' height='400' fill='#ece2f8'/><g transform='translate(86 150) scale(2)' opacity='.75'><path fill='#b99ae3' d='M31 22C27 9 14 1 7 4 0 7 3 18 14 22zM33 22C37 9 50 1 57 4c7 3 4 14-7 18z'/><path fill='#e8b8d8' d='M31 24c-9-1-17 5-15 12 2 6 10 6 15-6zM33 24c9-1 17 5 15 12-2 6-10 6-15-6z'/><rect fill='#7b5ea7' x='30.6' y='15' width='2.8' height='22' rx='1.4'/></g></svg>";
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   };
   const fotoDe = (p) => p.foto_url || semFoto(p.nome);
@@ -57,7 +57,7 @@
     if (cfg.MOSTRAR_ESGOTADOS === false) ps = ps.filter((p) => p.estoque > 0);
     const cmp = { novos: (a, b) => (b.criado_em || '').localeCompare(a.criado_em || ''), menor: (a, b) => a.preco_venda - b.preco_venda, maior: (a, b) => b.preco_venda - a.preco_venda }[ord];
     ps.sort((a, b) => (b.estoque > 0) - (a.estoque > 0) || cmp(a, b));
-    $('estado').innerHTML = !PECAS.length ? '<strong>Novidades chegando</strong>Ainda não há peças no catálogo. Volte em breve ou fale com a gente pelo WhatsApp.'
+    $('estado').innerHTML = !PECAS.length ? BORBOLETA + '<strong>Novidades chegando</strong>Ainda não há peças no catálogo. Volte em breve ou fale com a gente pelo WhatsApp.'
       : !ps.length ? '<strong>Nada encontrado</strong>Tente outra busca ou categoria.' : '';
     $('grade').innerHTML = ps.map((p) => {
       const esg = p.estoque <= 0, ult = !esg && p.estoque <= 2, tams = lista(p.tamanhos);
@@ -148,7 +148,7 @@
           <div class="qtd"><button type="button" data-k="${k}" data-d="-1" aria-label="Diminuir">−</button><output>${i.qtd}</output><button type="button" data-k="${k}" data-d="1" aria-label="Aumentar">+</button></div></div>
         <div class="lado"><strong>${brl.format(i.qtd * i.p.preco_venda)}</strong><button type="button" class="rm" data-rm="${k}">Remover</button></div>
       </div>`).join('')
-      : '<div class="vazio"><strong>Sua sacola está vazia</strong>Toque numa peça para escolher tamanho e cor.</div>';
+      : '<div class="vazio">' + BORBOLETA + '<strong>Sua sacola está vazia</strong>Toque numa peça para escolher tamanho e cor.</div>';
     const linhas = its.map((i) => `• ${i.qtd}x ${i.p.nome}${i.tam ? ' · Tam. ' + i.tam : ''}${i.cor ? ' · Cor ' + i.cor : ''} · ${brl.format(i.qtd * i.p.preco_venda)}`);
     const nome = $('clienteNome').value.trim();
     const msg = `Olá, ${NOME}! Quero fazer este pedido:\n\n${linhas.join('\n')}\n\nTotal: ${brl.format(total)}${nome ? `\nNome: ${nome}` : ''}\n\nPode confirmar a disponibilidade?`;

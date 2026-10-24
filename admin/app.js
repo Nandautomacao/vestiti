@@ -151,8 +151,9 @@
     return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Faturamento e lucro dos últimos 6 meses">${g}</svg>`;
   }
 
+  const BORBOLETA = '<svg class="borboleta" viewBox="0 0 64 48" aria-hidden="true"><g class="asas"><path class="asa-a" d="M31 22C27 9 14 1 7 4 0 7 3 18 14 22z"/><path class="asa-a" d="M33 22C37 9 50 1 57 4c7 3 4 14-7 18z"/><path class="asa-b" d="M31 24c-9-1-17 5-15 12 2 6 10 6 15-6z"/><path class="asa-b" d="M33 24c9-1 17 5 15 12-2 6-10 6-15-6z"/></g><rect class="corpo" x="30.6" y="15" width="2.8" height="22" rx="1.4"/><path class="antena" d="M32 16c-1-5-4-9-7-11M32 16c1-5 4-9 7-11" fill="none" stroke-width="1.3" stroke-linecap="round"/></svg>';
   function emptyRow(cols, title, text, btn) {
-    return `<tbody><tr><td colspan="${cols}" style="border:0"><div class="empty"><strong>${title}</strong><span>${text}</span>${btn || ''}</div></td></tr></tbody>`;
+    return `<tbody><tr><td colspan="${cols}" style="border:0"><div class="empty">${BORBOLETA}<strong>${title}</strong><span>${text}</span>${btn || ''}</div></td></tr></tbody>`;
   }
 
   function vendasFiltradas() {

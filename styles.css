@@ -1,22 +1,12 @@
 /* Vestiti — paleta lilás · vitrine de boutique: muito respiro, fotos grandes em 3:4, tipografia de revista para a marca */
 :root{
-  --bg:#fcfbfe; --surface:#ffffff; --ink:#1f1a26; --muted:#6b6377; --line:#e9e4f0;
-  --accent:#7b5ea7; --accent-ink:#ffffff; --accent-soft:#efe8f7;
+  --bg:#f3ecfa; --surface:#ffffff; --ink:#241b30; --muted:#6a5f78; --line:#e3d8f0;
+  --accent:#7b5ea7; --accent-ink:#ffffff; --accent-soft:#ece2f8; --wing:#b99ae3; --wing-2:#e8b8d8;
   --ok:#2f6b4f; --warn:#9a5b12; --warn-soft:#fbefdc; --bad:#a3302a;
   --font-display:"Cormorant Garamond", "Iowan Old Style", Georgia, serif;
   --font-body:"Manrope", "Segoe UI", system-ui, sans-serif;
   color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#141218; --surface:#1c1922; --ink:#f1edf7; --muted:#a8a0b4; --line:#2d2836;
-  --accent:#c9b3ec; --accent-ink:#22173a; --accent-soft:#2c2340;
-  --ok:#78c79f; --warn:#e6b25e; --warn-soft:#3a2c14; --bad:#f08a80;
-  color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#141218; --surface:#1c1922; --ink:#f1edf7; --muted:#a8a0b4; --line:#2d2836;
-  --accent:#c9b3ec; --accent-ink:#22173a; --accent-soft:#2c2340;
-  --ok:#78c79f; --warn:#e6b25e; --warn-soft:#3a2c14; --bad:#f08a80;
-  color-scheme:dark}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -164,3 +154,25 @@ dialog::backdrop{background:rgba(22,15,34,.5)}
 }
 
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;font-size:.9rem;z-index:60;max-width:calc(100vw - 32px)}
+
+/* ===== borboletas ===== */
+.borboleta{display:inline-block;flex:none}
+.borboleta .asa-a{fill:var(--wing)} .borboleta .asa-b{fill:var(--wing-2)} .borboleta .corpo{fill:var(--accent)}
+.borboleta .antena{stroke:var(--accent)}
+.marca{display:flex;align-items:center;gap:10px}
+.marca .borboleta{width:38px;height:28px}
+#fundo-borboletas{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+#fundo-borboletas .borboleta{position:absolute;opacity:.16}
+.aviso,.topo,main,.rodape{position:relative;z-index:1}
+.topo{z-index:20}
+.hero{position:relative}
+.hero-borboleta{position:absolute;right:-12px;top:24px;width:120px;height:90px;opacity:.9}
+@media (max-width:720px){.hero-borboleta{width:72px;height:54px;right:0;top:18px}}
+.card .foto{background:var(--accent-soft)}
+.vazio .borboleta,.estado .borboleta{width:64px;height:48px;display:block;margin:0 auto 10px}
+@media (prefers-reduced-motion:no-preference){
+  .hero-borboleta .asas,.marca .borboleta .asas{transform-origin:32px 24px;animation:bater 3.4s ease-in-out infinite}
+  .marca .borboleta .asas{animation-delay:1.2s}
+  @keyframes bater{0%,70%,100%{transform:scaleX(1)}80%{transform:scaleX(.55)}90%{transform:scaleX(1)}}
+}
+.chips button[aria-selected="true"],.opcoes button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
