@@ -4,7 +4,7 @@ window.LOJA_CONFIG = {
   LOJA_ID: '',
   NOME: 'GF Store',
   SLOGAN: 'Moda feminina para o seu dia a dia',
-  WHATSAPP: '5511915657217',
+  WHATSAPP: '5533999937872',
   INSTAGRAM: 'gfstoreoficial_12',
   ENDERECO: '',
   MOSTRAR_ESGOTADOS: true,
