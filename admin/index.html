@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vestiti · Estoque & Vendas</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="status" id="boot" style="max-width:1180px;margin:0 auto">Carregando…</div>
+<div class="authwrap" id="auth" hidden>
+  <div class="authbox">
+    <div><div class="eyebrow">Estoque &amp; Vendas</div><h1 class="loja-nome">Meu estabelecimento</h1></div>
+    <form id="formLogin" novalidate>
+      <label>E-mail<input id="lEmail" type="email" autocomplete="email" required></label>
+      <label>Senha<input id="lSenha" type="password" autocomplete="current-password" minlength="6" required></label>
+      <div class="alert bad" id="lErro" hidden></div>
+      <div class="alert ok" id="lOk" hidden></div>
+      <div class="row">
+        <button type="submit" class="primary" id="btnEntrar">Entrar</button>
+        <button type="button" id="btnCriar">Criar conta</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="wrap" id="app" hidden>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Estoque &amp; Vendas</div>
+      <h1 style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="loja-nome">Meu estabelecimento</span><button type="button" class="ghost" id="btnEditLoja" style="font-family:var(--font-body);font-size:.8rem">Alterar nome</button></h1>
+      <p>Mercadorias, custo de entrada, vendas e lucro em um só lugar.</p>
+    </div>
+    <div class="actions">
+      <span class="who"><span id="userEmail"></span><button type="button" class="ghost" id="btnSair">Sair</button></span>
+      <button type="button" id="btnNovaEntrada" disabled>+ Entrada</button>
+      <button type="button" id="btnNovaVenda" class="primary" disabled>+ Venda</button>
+    </div>
+  </header>
+
+  <div class="status" id="status">Carregando seus dados…</div>
+
+  <nav class="tabs" role="tablist">
+    <button type="button" role="tab" data-tab="painel" aria-selected="true">Painel</button>
+    <button type="button" role="tab" data-tab="vendas" aria-selected="false">Vendas</button>
+    <button type="button" role="tab" data-tab="entradas" aria-selected="false">Entradas</button>
+    <button type="button" role="tab" data-tab="produtos" aria-selected="false">Produtos</button>
+  </nav>
+
+  <!-- PAINEL -->
+  <section id="tab-painel" class="wrap" style="gap:16px">
+    <div class="bar">
+      <div class="left">
+        <label style="flex-direction:row;align-items:center;gap:8px">Período
+          <select id="periodo">
+            <option value="mes">Este mês</option>
+            <option value="mesant">Mês passado</option>
+            <option value="30d">Últimos 30 dias</option>
+            <option value="ano">Este ano</option>
+            <option value="tudo">Tudo</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="grid2">
+      <div class="card">
+        <header><h2>Faturamento e lucro por mês</h2>
+          <div class="legend"><span><i style="background:var(--accent)"></i>Faturamento</span><span><i style="background:var(--good)"></i>Lucro</span></div>
+        </header>
+        <div class="chart" id="chart"></div>
+      </div>
+      <div class="card">
+        <header><h2>Precisa repor</h2><span class="muted" style="font-size:.82rem">estoque ≤ mínimo</span></header>
+        <ul class="minilist" id="repor"></ul>
+      </div>
+    </div>
+    <div class="card">
+      <header><h2>Produtos que mais lucraram no período</h2></header>
+      <div class="tablewrap" style="border:0"><table id="topTable"></table></div>
+    </div>
+  </section>
+
+  <!-- VENDAS -->
+  <section id="tab-vendas" class="wrap" style="gap:12px" hidden>
+    <div class="bar">
+      <div class="left">
+        <select id="periodoVendas" aria-label="Período">
+          <option value="mes">Este mês</option><option value="mesant">Mês passado</option><option value="30d">Últimos 30 dias</option><option value="ano">Este ano</option><option value="tudo" selected>Tudo</option>
+        </select>
+        <input type="search" id="buscaVendas" placeholder="Buscar produto ou cliente">
+      </div>
+      <button type="button" id="btnCsv" hidden>Exportar CSV</button>
+    </div>
+    <div class="tablewrap"><table id="vendasTable"></table></div>
+  </section>
+
+  <!-- ENTRADAS -->
+  <section id="tab-entradas" class="wrap" style="gap:12px" hidden>
+    <div class="bar">
+      <div class="left">
+        <select id="periodoEntradas" aria-label="Período">
+          <option value="mes">Este mês</option><option value="mesant">Mês passado</option><option value="30d">Últimos 30 dias</option><option value="ano">Este ano</option><option value="tudo" selected>Tudo</option>
+        </select>
+        <input type="search" id="buscaEntradas" placeholder="Buscar produto ou fornecedor">
+      </div>
+    </div>
+    <div class="tablewrap"><table id="entradasTable"></table></div>
+  </section>
+
+  <!-- PRODUTOS -->
+  <section id="tab-produtos" class="wrap" style="gap:12px" hidden>
+    <div class="bar">
+      <div class="left"><input type="search" id="buscaProdutos" placeholder="Buscar por nome, código ou categoria"></div>
+      <button type="button" id="btnNovoProduto" class="primary" disabled>+ Produto</button>
+    </div>
+    <div class="tablewrap"><table id="produtosTable"></table></div>
+  </section>
+</div>
+
+<!-- Dialog: produto -->
+<dialog id="dlgProduto">
+  <form id="formProduto" novalidate>
+    <h2 id="dlgProdutoTitulo">Novo produto</h2>
+    <div class="fields">
+      <label class="full">Nome do produto *<input id="pNome" required maxlength="120"></label>
+      <label>Código / SKU<input id="pCodigo" maxlength="40"></label>
+      <label>Categoria<input id="pCategoria" maxlength="60" list="categorias"></label>
+      <label>Unidade<select id="pUnidade"><option value="un">un</option><option value="kg">kg</option><option value="g">g</option><option value="L">L</option><option value="m">m</option><option value="cx">cx</option><option value="pct">pct</option><option value="par">par</option></select></label>
+      <label>Preço de venda (R$) *<input id="pPreco" inputmode="decimal" placeholder="0,00"></label>
+      <label>Estoque mínimo<input id="pMin" type="number" min="0" step="any" placeholder="0"></label>
+    </div>
+    <fieldset id="pCatalogo">
+      <legend>Catálogo do site</legend>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="pPublicado"> Mostrar este produto no catálogo do site</label>
+        <label>Tamanhos<input id="pTamanhos" maxlength="80" placeholder="P, M, G, GG"></label>
+        <label>Cores<input id="pCores" maxlength="120" placeholder="Preto, Off-white"></label>
+        <label class="full">Descrição<textarea id="pDescricao" rows="3" maxlength="600" placeholder="Tecido, caimento, medidas da modelo…"></textarea></label>
+        <div class="full fotoRow">
+          <img id="pFotoPrev" alt="Foto do produto" hidden>
+          <label>Foto<input type="file" id="pFoto" accept="image/*"></label>
+          <button type="button" class="ghost danger" id="pFotoRemover" hidden>Remover foto</button>
+        </div>
+      </div>
+    </fieldset>
+    <p class="muted" id="pCatalogoAviso" hidden style="margin:0;font-size:.85rem">Para mostrar produtos no site, rode o arquivo <code>supabase/catalogo.sql</code> no Supabase e recarregue a página.</p>
+    <fieldset id="pInicial">
+      <legend>Estoque inicial (opcional)</legend>
+      <div class="fields">
+        <label>Quantidade<input id="pQtdIni" type="number" min="0" step="any" placeholder="0"></label>
+        <label>Custo unitário (R$)<input id="pCustoIni" inputmode="decimal" placeholder="0,00"></label>
+      </div>
+    </fieldset>
+    <div class="alert bad" id="pErro" hidden></div>
+    <div class="formfoot">
+      <button type="button" data-close>Cancelar</button>
+      <button type="submit" class="primary">Salvar produto</button>
+    </div>
+  </form>
+</dialog>
+<datalist id="categorias"></datalist>
+
+<!-- Dialog: entrada -->
+<dialog id="dlgEntrada">
+  <form id="formEntrada" novalidate>
+    <h2>Nova entrada de mercadoria</h2>
+    <div class="fields">
+      <label class="full">Produto *<select id="eProduto"></select></label>
+      <label>Data *<input id="eData" type="date"></label>
+      <label>Quantidade *<input id="eQtd" type="number" min="0" step="any"></label>
+      <label>Custo unitário (R$) *<input id="eCusto" inputmode="decimal" placeholder="0,00"></label>
+      <label>Fornecedor<input id="eFornecedor" maxlength="80"></label>
+      <label class="full">Observação<input id="eObs" maxlength="200" placeholder="Nº da nota, frete incluso etc."></label>
+    </div>
+    <div class="preview" id="ePreview"></div>
+    <div class="alert bad" id="eErro" hidden></div>
+    <div class="formfoot">
+      <button type="button" data-close>Cancelar</button>
+      <button type="submit" class="primary">Registrar entrada</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Dialog: venda -->
+<dialog id="dlgVenda">
+  <form id="formVenda" novalidate>
+    <h2>Nova venda</h2>
+    <div class="fields">
+      <label class="full">Produto *<select id="vProduto"></select></label>
+      <label>Data *<input id="vData" type="date"></label>
+      <label>Quantidade *<input id="vQtd" type="number" min="0" step="any"></label>
+      <label>Preço unitário (R$) *<input id="vPreco" inputmode="decimal" placeholder="0,00"></label>
+      <label>Cliente<input id="vCliente" maxlength="80"></label>
+      <label class="full">Observação<input id="vObs" maxlength="200" placeholder="Forma de pagamento, desconto etc."></label>
+    </div>
+    <div class="preview" id="vPreview"></div>
+    <div class="alert warn" id="vAviso" hidden></div>
+    <div class="alert bad" id="vErro" hidden></div>
+    <div class="formfoot">
+      <button type="button" data-close>Cancelar</button>
+      <button type="submit" class="primary">Registrar venda</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Dialog: confirmar -->
+<dialog id="dlgLoja">
+  <form id="formLoja" novalidate>
+    <h2>Nome do estabelecimento</h2>
+    <p class="muted" style="margin:0">Ele aparece no topo do sistema e na tela de login.</p>
+    <label>Nome<input id="lojaNome" maxlength="80" placeholder="Ex.: Açaí da Promeca"></label>
+    <div class="preview" id="lojaIdBox" style="grid-template-columns:1fr auto;align-items:center">
+      <span>ID da loja (vai no config.js do site)<br><code id="lojaId" style="word-break:break-all"></code></span>
+      <button type="button" id="btnCopiarId">Copiar</button>
+    </div>
+    <div class="alert bad" id="lojaErro" hidden></div>
+    <div class="formfoot">
+      <button type="button" data-close>Cancelar</button>
+      <button type="submit" class="primary">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlgConfirm">
+  <form id="formConfirm" novalidate>
+    <h2 id="cTitulo">Excluir?</h2>
+    <p id="cTexto" style="margin:0"></p>
+    <div class="formfoot">
+      <button type="button" data-close>Cancelar</button>
+      <button type="submit" class="danger-solid" id="cOk">Excluir</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
